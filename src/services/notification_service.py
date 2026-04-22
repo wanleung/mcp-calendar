@@ -18,7 +18,7 @@ import hashlib
 import json
 import logging
 from datetime import datetime, timedelta
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any, List, Protocol
 from dataclasses import dataclass, field
 from enum import Enum
 
@@ -37,11 +37,20 @@ from src.models.notification import (
     NotificationEvent,
 )
 from src.auth.oauth_manager import OAuthManager
-from src.services.rate_limiter import RateLimiter
 from src.services.error_handler import ErrorHandler
 
 # Configure logging
 logger = logging.getLogger(__name__)
+
+
+class RateLimiter(Protocol):
+    """Protocol for rate limiter dependencies used by NotificationService."""
+
+    def is_rate_limited(self) -> bool:
+        ...
+
+    def get_retry_after(self) -> float:
+        ...
 
 
 class NotificationService:
