@@ -44,12 +44,14 @@ logger = logging.getLogger(__name__)
 
 
 class RateLimiter(Protocol):
-    """Protocol for rate limiter dependencies used by NotificationService."""
+    """Protocol for rate limiting dependencies used by NotificationService."""
 
     def is_rate_limited(self) -> bool:
+        """Return whether requests are currently rate limited."""
         ...
 
-    def get_retry_after(self) -> float:
+    def get_retry_after(self) -> Optional[float]:
+        """Return retry-after delay in seconds when rate limited."""
         ...
 
 
@@ -112,26 +114,6 @@ class NotificationService:
         
         # Track notification IDs
         self._notification_counter = 0
-    
-    @property
-    def _retry_config(self) -> Dict[str, Any]:
-        """Get retry configuration."""
-        return self._retry_config
-    
-    @_retry_config.setter
-    def _retry_config(self, value: Dict[str, Any]) -> None:
-        """Set retry configuration."""
-        self._retry_config = value
-    
-    @property
-    def _circuit_breaker_config(self) -> Dict[str, Any]:
-        """Get circuit breaker configuration."""
-        return self._circuit_breaker_config
-    
-    @_circuit_breaker_config.setter
-    def _circuit_breaker_config(self, value: Dict[str, Any]) -> None:
-        """Set circuit breaker configuration."""
-        self._circuit_breaker_config = value
     
     def _generate_notification_id(self) -> str:
         """
