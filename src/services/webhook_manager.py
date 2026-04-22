@@ -125,7 +125,7 @@ class WebhookManager:
             )
         
         # Generate subscription ID
-        subscription_id = self._generate_subscription_id(
+        subscription_id = await self._generate_subscription_id(
             webhook_url, calendar_id, event_id
         )
         
