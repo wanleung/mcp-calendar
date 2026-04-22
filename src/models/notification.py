@@ -46,9 +46,9 @@ class NotificationPayload:
         error_message: Error message if delivery failed
     """
     calendar_id: str
+    user_id: str
     event_id: Optional[str] = None
     change_type: Optional[str] = None
-    user_id: str
     timestamp: datetime = field(default_factory=datetime.utcnow)
     provider_metadata: Dict[str, Any] = field(default_factory=dict)
     notification_type: NotificationType = NotificationType.CALENDAR_CHANGE
@@ -56,7 +56,7 @@ class NotificationPayload:
     error_message: Optional[str] = None
 
 
-@dataclass
+@dataclass(kw_only=True)
 class RSVPNotificationPayload(NotificationPayload):
     """
     RSVP response notification payload.
@@ -90,12 +90,7 @@ class CalendarChangeEventPayload(NotificationPayload):
         timestamp: When the notification was created
         provider_metadata: Raw provider payload for debugging
     """
-    calendar_id: str
-    event_id: Optional[str] = None
-    change_type: str
-    user_id: str
-    timestamp: datetime = field(default_factory=datetime.utcnow)
-    provider_metadata: Dict[str, Any] = field(default_factory=dict)
+    pass
 
 
 @dataclass
@@ -138,10 +133,10 @@ class WebhookSubscription:
     subscription_id: str
     webhook_url: str
     calendar_id: str
+    expires_at: datetime
     event_id: Optional[str] = None
     change_types: list[str] = field(default_factory=list)
     created_at: datetime = field(default_factory=datetime.utcnow)
-    expires_at: datetime
     last_sent_at: Optional[datetime] = None
     last_retry_at: Optional[datetime] = None
     retry_after: Optional[int] = None
