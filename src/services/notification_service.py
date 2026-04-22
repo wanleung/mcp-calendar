@@ -43,7 +43,7 @@ from src.services.error_handler import ErrorHandler
 logger = logging.getLogger(__name__)
 
 
-class RateLimiter(Protocol):
+class RateLimiterProtocol(Protocol):
     """Protocol for rate limiting dependencies used by NotificationService."""
 
     def is_rate_limited(self) -> bool:
@@ -74,7 +74,7 @@ class NotificationService:
     def __init__(
         self,
         oauth_manager: OAuthManager,
-        rate_limiter: RateLimiter,
+        rate_limiter: RateLimiterProtocol,
         error_handler: ErrorHandler,
         retry_config: Optional[Dict[str, Any]] = None,
         circuit_breaker_config: Optional[Dict[str, Any]] = None,
